@@ -31,8 +31,6 @@
         <th><%= t(".heading.status") %></th>
         <th><%= t(".heading.transition_aged_youth") %></th>
         <th><%= t(".heading.assigned_to") %></th>
-        <th><%= t(".heading.actions") %></th>
-        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -57,8 +55,6 @@
               Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %>
             <% end %>
           </td>
-          <td><%= link_to t("button.detail_view"), casa_case_path(casa_case) %></td>
-          <td><%= link_to t("button.edit"), edit_casa_case_path(casa_case) %></td>
         </tr>
       <% end %>
       </tbody>
