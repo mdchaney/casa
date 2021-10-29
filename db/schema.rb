@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_12_180102) do
+ActiveRecord::Schema.define(version: 2021_10_25_143709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,8 +117,8 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.string "display_name"
     t.string "address"
     t.string "footer_links", default: [], array: true
-    t.boolean "show_driving_reimbursement", default: true
     t.string "slug"
+    t.boolean "show_driving_reimbursement", default: true
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -229,6 +229,14 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.index ["creator_id"], name: "index_followups_on_creator_id"
   end
 
+  create_table "healths", force: :cascade do |t|
+    t.datetime "latest_deploy_time"
+    t.integer "singleton_guard"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["singleton_guard"], name: "index_healths_on_singleton_guard", unique: true
+  end
+
   create_table "hearing_types", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
     t.string "name", null: false
@@ -245,6 +253,16 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
   end
 
+  create_table "mileage_rates", force: :cascade do |t|
+    t.decimal "amount"
+    t.date "effective_date"
+    t.boolean "is_active", default: true
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_mileage_rates_on_user_id"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.string "recipient_type", null: false
     t.bigint "recipient_id", null: false
@@ -255,6 +273,14 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["read_at"], name: "index_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
+  end
+
+  create_table "preference_sets", force: :cascade do |t|
+    t.bigint "user_id"
+    t.jsonb "case_volunteer_columns", default: "{}", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_preference_sets_on_user_id"
   end
 
   create_table "sent_emails", force: :cascade do |t|
@@ -343,6 +369,8 @@ ActiveRecord::Schema.define(version: 2021_10_12_180102) do
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
+  add_foreign_key "mileage_rates", "users"
+  add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
