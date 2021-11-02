@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_25_143709) do
+ActiveRecord::Schema.define(version: 2021_10_29_033530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 2021_10_25_143709) do
     t.boolean "want_driving_reimbursement", default: false
     t.string "notes"
     t.datetime "deleted_at"
+    t.boolean "reimbursement_complete", default: false
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.index ["deleted_at"], name: "index_case_contacts_on_deleted_at"
@@ -257,9 +258,11 @@ ActiveRecord::Schema.define(version: 2021_10_25_143709) do
     t.decimal "amount"
     t.date "effective_date"
     t.boolean "is_active", default: true
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "casa_org_id", null: false
+    t.index ["casa_org_id"], name: "index_mileage_rates_on_casa_org_id"
     t.index ["user_id"], name: "index_mileage_rates_on_user_id"
   end
 
